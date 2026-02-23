@@ -1,66 +1,100 @@
-## Foundry
+# School Management System (ERC20 Payments) 🎓💸
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+A Solidity-based **School Management System** that manages students, staff, and payments using a **custom ERC20 token built from scratch**.
 
-Foundry consists of:
+The system supports:
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+- Student registration & fee payments
+- Staff employment, suspension & salary payments
+- Level-based pricing (100 – 400)
+- Payment tracking with timestamps
+- Full on-chain record keeping
 
-## Documentation
+All payments are executed using **OPERAPAY (OPPY)**.
 
-https://book.getfoundry.sh/
+---
 
-## Usage
+## 🪙 Payment Token — OPERAPAY (OPPY)
 
-### Build
+A custom ERC20 token built **from scratch (no OpenZeppelin)** and used as the official payment currency of the school.
 
-```shell
-$ forge build
-```
+| Property | Value |
+|----------|--------|
+| Token Name | OPERAPAY |
+| Symbol | OPPY |
+| Decimals | 18 |
+| Total Supply | 26e18 (26 OPPY) |
+| Standard | ERC20 (Custom Implementation) |
 
-### Test
+The deployer receives the full supply at deployment.
 
-```shell
-$ forge test
-```
+---
 
-### Format
+## ✨ Features
 
-```shell
-$ forge fmt
-```
+### 🎓 Students
 
-### Gas Snapshots
+- Register students with:
+  - Name
+  - Level (100 / 200 / 300 / 400)
+  - Wallet address (msg.sender)
+- Fee is paid using OPY during registration
+- Tracks:
+  - `feesPaid`
+  - `feesPaidAt` (timestamp)
+  - `totalFeesPaid`
+  - `isActive`
+- Admin can remove students
+- Fetch:
+  - Student by ID
+  - All student IDs
 
-```shell
-$ forge snapshot
-```
+---
 
-### Anvil
+### 👨‍🏫 Staff
 
-```shell
-$ anvil
-```
+- Admin can:
+  - Employ new staff
+  - Suspend staff
+  - Remove staff
+  - Pay staff salary using OPPY
+- Tracks:
+  - `salaryPaid`
+  - `salaryPaidAt`
+  - `totalSalaryPaid`
+  - `isActive`
+  - `isSuspended`
+- Fetch:
+  - Staff by ID
+  - All staff IDs
 
-### Deploy
+---
 
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
+### 💰 Fee System
 
-### Cast
+Admin sets school fees based on level:
 
-```shell
-$ cast <subcommand>
-```
+Supported Levels:
+- 100
+- 200
+- 300
+- 400
 
-### Help
 
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+### Project Structure using Foundry
+school-system/
+│
+├── src/
+│   ├── token/
+│   │   ├── IERC20.sol
+│   │   └── OPERAPAY.sol
+│   │
+│   └── school/
+│       └── SchoolManagementSystem.sol
+│
+├── script/
+│   └── Deploy.s.sol
+│
+├── foundry.toml
+├── .env
+└── README.md

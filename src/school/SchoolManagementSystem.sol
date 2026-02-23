@@ -4,15 +4,36 @@ pragma solidity ^0.8.20;
 import {IERC20} from "../token/IERC20.sol";
 
 contract SchoolManagementSystem {
+
+    // state variables
     IERC20 public immutable paymentToken;
     address public admin;
 
+
+ //  Students Struct
+    struct Student {
+        uint256 id;
+        string name;
+        uint16 level;
+        address wallet;
+
+        bool isActive;
+
+        bool feesPaid;
+        uint256 feesPaidAt;
+        uint256 totalFeesPaid;
+    }
+
+
+    // constructor
     constructor(address tokenAddress) {
         require(tokenAddress != address(0), "Token address zero");
         paymentToken = IERC20(tokenAddress);
         admin = msg.sender;
     }
 
+
+   
     modifier onlyAdmin() {
         require(msg.sender == admin, "Not admin");
         _;
@@ -36,20 +57,7 @@ contract SchoolManagementSystem {
         return (level == 100 || level == 200 || level == 300 || level == 400);
     }
 
-    //  Students 
-    struct Student {
-        uint256 id;
-        string name;
-        uint16 level;
-        address wallet;
-
-        bool isActive;
-
-        bool feesPaid;
-        uint256 feesPaidAt;
-        uint256 totalFeesPaid;
-    }
-
+    
     uint256 public studentCount;
     mapping(uint256 => Student) private students;
     uint256[] private studentIds;
@@ -147,6 +155,10 @@ contract SchoolManagementSystem {
     event StaffRemoved(uint256 indexed staffId, uint256 timestamp);
     event StaffPaid(uint256 indexed staffId, address indexed wallet, uint256 amount, uint256 timestamp);
 
+
+
+
+  // Staff Fuctions
     function employStaff(
         string calldata name,
         string calldata role,
@@ -178,6 +190,7 @@ contract SchoolManagementSystem {
 
         emit StaffEmployed(id, wallet, role, salary, block.timestamp);
     }
+
 
     function suspendStaff(uint256 staffId, bool suspended) external onlyAdmin {
         Staff storage st = staffs[staffId];
