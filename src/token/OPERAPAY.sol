@@ -4,6 +4,7 @@ pragma solidity ^0.8.20;
 import {IERC20} from "./IERC20.sol";
 
 contract OPERAPAY is IERC20 {
+    
     // Token Metadata 
     string private constant tokenName = "OPERAPAY";
     string private constant tokenSymbol = "OPPY";
@@ -46,7 +47,7 @@ contract OPERAPAY is IERC20 {
 
    
     function transfer(address to, uint256 amount) external returns (bool) {
-        _transfer(msg.sender, to, amount);
+        transfer(msg.sender, to, amount);
         return true;
     }
 
@@ -71,7 +72,7 @@ contract OPERAPAY is IERC20 {
     }
 
    
-    function _transfer(address from, address to, uint256 amount) internal {
+    function transfer(address from, address to, uint256 amount) internal {
         require(from != address(0), "Transfer from zero");
         require(to != address(0), "Transfer to zero");
         require(amount > 0, "Amount zero");
